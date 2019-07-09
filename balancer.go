@@ -5,31 +5,31 @@ import (
 	"sync"
 )
 
-// A CharacterGroup is a structure that contains the opening and closing Characters of a common Character.
+// A CharacterGroup is a structure that contains the opening and closing characters (runes) of a common Character.
 type CharacterGroup struct {
 	Opening rune
 	Closing rune
 }
 
-// A CharacterEntry contains a Character and the CharacterGroup it belongs to.
+// A CharacterEntry contains a character and the CharacterGroup it belongs to.
 type CharacterEntry struct {
 	Char  rune
 	Group *CharacterGroup
 }
 
-// A CharacterGroupStack is a thread-safe stack implementation for CharacterGroup.
+// A CharacterGroupStack is a thread-safe stack implementation for CharacterEntry.
 type CharacterGroupStack struct {
 	mux   *sync.Mutex
 	array []*CharacterEntry
 }
 
 // NewCharacterGroup returns a CharacterGroup pointer with the provided
-// opening and closing Characters (of type rune).
+// opening and closing characters (runes).
 func NewCharacterGroup(opening, closing rune) *CharacterGroup {
 	return &CharacterGroup{Opening: opening, Closing: closing}
 }
 
-// NewCharacterEntry returns a CharacterEntry with the provided Character and CharacterGroup.
+// NewCharacterEntry returns a CharacterEntry with the provided character and CharacterGroup.
 func NewCharacterEntry(Char rune, Group **CharacterGroup) *CharacterEntry {
 	return &CharacterEntry{Char: Char, Group: *Group}
 }
@@ -39,13 +39,13 @@ func NewCharacterGroupStack() *CharacterGroupStack {
 	return &CharacterGroupStack{mux: &sync.Mutex{}, array: make([]*CharacterEntry, 0)}
 }
 
-// IsClosingCharacter returns true if the Character in the CharacterEntry is the closing Character
+// IsClosingCharacter returns true if the character in the CharacterEntry is the closing character
 // in the corresponding CharacterGroup.
 func (entry *CharacterEntry) IsClosingCharacter() bool {
 	return entry.Char == entry.Group.Closing
 }
 
-// IsBalanced returns true if all the Characters are balanced, false otherwise.
+// IsBalanced returns true if all the characters are balanced, false otherwise.
 func (stack *CharacterGroupStack) IsBalanced() bool {
 	return len(stack.array) == 0
 }
@@ -60,7 +60,7 @@ func (stack *CharacterGroupStack) Push(entry **CharacterEntry) {
 
 	length := len(stack.array)
 
-	// Check if we have a pair of opening/closing Characters.
+	// Check if we have a pair of opening/closing characters.
 	if (*entry).IsClosingCharacter() {
 		prev := stack.array[length-1]
 
